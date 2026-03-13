@@ -13,7 +13,6 @@ import userApi from "../api/user.js";
 export const SignIn = () => {
 
     const {register , handleSubmit } = useForm()
-    const [loader, setLoader] = useState(true)
     const [error, setError] = useState({
         error:false,
         message:""
@@ -21,8 +20,7 @@ export const SignIn = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const login = async (payload)=>{
-        setLoader(true)
+    const signin = async (payload)=>{
 
         setError((prev)=> ({...prev  , error:false , message:""}))
         console.log(payload)
@@ -33,21 +31,11 @@ export const SignIn = () => {
                 navigate('/')
                 return
             }
-            const res = await authApi.login(payload)
+            const res = await authApi.signin(payload)
 
-            if(!res || !res?.data || !res?.data?.data || res?.data?.data?.statusCode !== 200) {
-
-                setError(()=>({error: true , message:"error in authentication"}))
-                setLoader(false)
-
-            }
+            if(!res || !res?.data || !res?.data?.data || res?.data?.data?.statusCode !== 200) setError(()=>({error: true , message:"error in authentication"}))
 
             if(res?.data) {
-                const {data} = res
-
-                dispatch(authLogin(data.data))
-                setLoader(false)
-
                 navigate('/login')
             }
 
@@ -55,7 +43,6 @@ export const SignIn = () => {
 
         }  catch (e) {
             setError(()=>({error: true , message:"error in authentication " + e.message + " status - " + e.statusCode}))
-            setLoader(false)
             dispatch(logout())
 
 
@@ -68,14 +55,7 @@ export const SignIn = () => {
 
 
 
-if(loader) {
-    return (
-        <div className="w-full min-h-screen ">
 
-        loading...
-    </div>
-    )
-}
 
     return (
         <>
@@ -99,28 +79,53 @@ if(loader) {
                         <div>
 
                             <Input
-                                label = "email"
-                                placeholder = "enter email"
-                                type = "email"
-                                {...register("email" , {
-                                    required: true,
-                                    validate:{
+                            label="fullName"
+                            placeholder = "enter your name"
+                            {...register("fullName" , {required:true})}
 
-                                        matchPattern:(value)=> /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(value)  || "email must  be valid"
+                            />
+
+                            <Input
+                                label ="username"
+                                placeholder = "enter username"
+                                {...register("username" , {required:true})}
+
+                            />
+
+                            <Input
+                            label = "email"
+                            placeholder = "enter email"
+                            type = "email"
+                            {...register("email" , {
+                                required: true,
+                                validate:{
+
+                                    matchPattern:(value)=> /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(value)  || "email must  be valid"
 
 
 
 
 
-                                    }
-                                })}
+                                }
+                            })}
                             />
                             <Input
-                                label = "password"
-                                placeholder = "enter password"
-                                type='passord'
-                                {...register("password" , {required:true})}
+                            label = "password"
+                            placeholder = "enter password"
+                            type='passord'
+                            {...register("password" , {required:true})}
                             />
+                            <Input
+                                label="avatar"
+                                type="image"
+                                {...register("avatar" , {required:true})}
+
+
+
+                            />
+
+
+
 
                             <Button
                                 type = "submit"
@@ -128,7 +133,7 @@ if(loader) {
 
                             >
 
-                               Login
+                              Sign In
 
                             </Button>
 
