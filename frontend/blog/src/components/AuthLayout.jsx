@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
-export const Protection = ({children  , authentication = true , }) => {
+export const Protection = ({children  , authentication = true  }) => {
     const [loader, setLoader] = useState(true);
     const navigation = useNavigate()
     const auth = useSelector((state)=> state.auth.isAuthenticated)

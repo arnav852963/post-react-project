@@ -13,25 +13,24 @@ export const LogoutBtn = () => {
     })
 
     const handleLogout = async () => {
-try {
-    const res = await authApi.logout()
-    if (!res || res.data.data.statusCode !== 200) {
-        setError(() => ({error: true, message: "logout failed , please try again"}))
-    }
+        try {
+            const res = await authApi.logout()
+            if (!res || res.data.data.statusCode !== 200) {
+                setError(() => ({error: true, message: "logout failed , please try again"}))
+            }
 
 
-    dispatch(logout())
-} catch (e) {
-    setError(() => ({error: true, message: e.message + " " + "status code " + e.statusCode}))
+            dispatch(logout())
+        } catch (e) {
+            setError(() => ({error: true, message: e.message + " " + "status code " + e.statusCode}))
 
-}
+        }
     }
     return error.error ? (
         <>
-            <h1> Error {error.message}</h1>
-
-
-
+            <div className="border-4 border-black bg-[#FF395C] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <h1 className="text-sm font-black uppercase text-black"> Error: {error.message}</h1>
+            </div>
         </>
     ) :  (
         <>
@@ -57,13 +56,6 @@ try {
                     <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
             </button>
-
-
-
         </>
-
-
-
-
     )
 }

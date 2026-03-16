@@ -2,7 +2,11 @@ import api from "./axios.js";
 
 const  blogApi={
     createBlog: (blogData)=>{
-        return api.post("/blog/createBlog", blogData);
+        return api.post("/blog/createBlog", blogData , {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
     },
     getBlog: (blogId)=>{
         return api.get(`/blog/getBlog/${blogId}`);
@@ -22,6 +26,9 @@ const  blogApi={
                 "Content-Type": "multipart/form-data"
             }
         });
+    },
+    deleteBlog:(id)=>{
+        return api.delete(`/blog/deleteBlog/${id}`)
     }
 
 }
