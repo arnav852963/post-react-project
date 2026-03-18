@@ -8,15 +8,18 @@ import {set} from "react-hook-form";
 export const Home = () => {
 
     const [error, setError] = useState(null)
+    const [loader, setLoader] = useState(true)
 
     const [allBlogs ,  setAllBlogs] =useState(null)
     useEffect(() => {
         setError({error:false , message:''})
+        setLoader(true)
         ;(async ()=>{
             try {
                 const allBlogs = await blogApi.getAllBlogs()
                 if(!allBlogs || !allBlogs?.data || allBlogs?.data?.data.length === 0) {
                     setError({error:true , message : "cannot fetch all posts"})
+                    setLoader(false)
                     return
 
                 }
@@ -27,6 +30,7 @@ export const Home = () => {
 
             } catch (e) {
                 setError({error: true , message: "cannot fetch all posts cause : "  + e.message})
+                setLoader(false)
 
 
 
@@ -65,7 +69,23 @@ export const Home = () => {
         }
     }
 
-    return (
+    return loader ?  (<>
+        <div className="min-h-screen flex items-center justify-center bg-[#B4FF39]">
+            <div className="bg-white border-4 border-black p-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+                <h1 className="text-black text-6xl font-black uppercase italic tracking-tighter flex">
+                    {"Loading...".split("").map((letter, index) => (
+                        <span
+                            key={index}
+                            className="animate-bounce"
+                            style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                    {letter === " " ? "\u00A0" : letter}
+                </span>
+                    ))}
+                </h1>
+            </div>
+        </div>
+    </>)  : (
         <div className="w-full bg-white py-12">
             <Container>
                 <div className="flex flex-wrap -m-4">

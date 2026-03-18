@@ -13,7 +13,7 @@ import userApi from "../api/user.js";
 export const Login = () => {
 
     const { register, handleSubmit } = useForm()
-    const [loader, setLoader] = useState(true)
+    const [loader, setLoader] = useState(false)
     const [error, setError] = useState({
         error: false,
         message: ""
@@ -28,28 +28,26 @@ export const Login = () => {
         console.log(payload)
         try {
 
-            const user = await userApi.getUser()
-            if (user.data.data) {
-                navigate('/')
-                return
-            }
+
+
             const res = await authApi.login(payload)
 
-            if (!res || !res?.data || !res?.data?.data || res?.data?.data?.statusCode !== 200) {
+            if (!res || !res?.data || !res?.data?.data || res?.data?.statusCode !== 200) {
 
                 setError(() => ({ error: true, message: "error in authentication" }))
                 setLoader(false)
+                return
 
             }
 
-            if (res?.data) {
+
                 const { data } = res
 
                 dispatch(authLogin(data.data))
                 setLoader(false)
 
-                navigate('/login')
-            }
+                navigate('/')
+
 
 
 

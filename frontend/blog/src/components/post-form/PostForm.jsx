@@ -27,6 +27,7 @@ export const PostForm = ({post}) => {
     const userData = useSelector(state => state.auth.userInfo)
 
     const submit = async (data)=>{
+        console.log(data)
         const form  = new FormData()
         setError({error: false , message: ""})
 

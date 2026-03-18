@@ -31,5 +31,5 @@ export const authSlice = createSlice({
 
     }
 })
-export const  {login , logout} = authSlice.reducer
+export const  {login , logout} = authSlice.actions
 export const authReducers = authSlice.reducer

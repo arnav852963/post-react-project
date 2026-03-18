@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import {data, Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 
 import {login as authLogin, logout} from "../store/authSlicec.js";
 import {useForm} from "react-hook-form";
@@ -27,16 +27,13 @@ export const SignIn = () => {
         console.log(payload)
         try {
 
-            const user  = await userApi.getUser()
-            if(user.data.data) {
-                navigate('/')
-                return
-            }
+
             const res = await authApi.signin(payload)
 
             if(!res || !res?.data || !res?.data?.data || res?.data?.data?.statusCode !== 200) setError(()=>({error: true , message:"error in authentication"}))
 
-            if(res?.data) {
+            if(res?.data && res?.data?.data) {
+                console.log(res?.data)
                 navigate('/login')
             }
 
@@ -115,45 +112,9 @@ export const SignIn = () => {
                                 {...register("password" , {required:true})}
                             />
 
-                            <div className="space-y-2">
-                                <label className="block text-sm font-black uppercase tracking-wider text-black">Avatar</label>
 
-                                <div
-                                    onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('bg-[#B4FF39]'); }}
-                                    onDragLeave={(e) => { e.preventDefault(); e.currentTarget.classList.remove('bg-[#B4FF39]'); }}
-                                    onDrop={(e) => {
-                                        e.preventDefault();
-                                        e.currentTarget.classList.remove('bg-[#B4FF39]');
-                                        const file = e.dataTransfer.files[0];
-                                        if (file) setValue("avatar", e.dataTransfer.files);
-                                    }}
-                                    onClick={() => document.getElementById('avatar-input').click()}
-                                    className="group relative flex flex-col items-center justify-center w-full h-32 border-4 border-dashed border-black bg-white hover:bg-gray-50 transition-all cursor-pointer overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-                                >
-                                    {avatarFile && avatarFile[0] ? (
-                                        <div className="flex flex-col items-center p-2 text-center">
-                                            <p className="text-sm text-black font-black uppercase italic">Selected: {avatarFile[0].name}</p>
-                                            <p className="text-[10px] text-gray-500 font-bold mt-1 uppercase">Click to swap</p>
-                                        </div>
-                                    ) : (
-                                        <div className="flex flex-col items-center justify-center">
-                                            <svg className="w-8 h-8 mb-2 text-black transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" strokeWidth="3" strokeLinecap="square" />
-                                            </svg>
-                                            <p className="text-xs font-black uppercase text-black">Drop avatar or click</p>
-                                        </div>
-                                    )}
 
-                                    <Input
-                                        type="file"
-                                        id="avatar-input"
-                                        accept="image/*"
-                                        className="hidden"
-                                        {...register("avatar", { required: true })}
-                                        onChange={(e) => setValue("avatar", e.target.files)}
-                                    />
-                                </div>
-                            </div>
+
 
                             <Button
                                 type = "submit"

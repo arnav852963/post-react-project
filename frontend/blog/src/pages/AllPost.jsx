@@ -14,9 +14,10 @@ export const AllPost = () => {
         ;(async () => {
             try {
                 const allBlogs = await blogApi.getAllBlogs()
-                if (!allBlogs || !allBlogs.data || !allBlogs.data.data || allBlogs.data.statusCode !== 200) {
+                if (!allBlogs || !allBlogs?.data || !allBlogs?.data?.data || allBlogs?.data?.statusCode !== 200 || allBlogs?.data?.data?.length === 0) {
                     setLoader(false)
                     setError({error: true, message: "couldn't fetch  the blogs"})
+                    return
                 }
                 setBlogs(() => allBlogs?.data?.data)
                 setLoader(false)
