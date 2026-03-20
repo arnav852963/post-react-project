@@ -2,19 +2,37 @@ import React , {useState , useEffect} from "react";
 import {Container} from "../container/Container.jsx";
 import {PostCard} from "../components/PostCard.jsx";
 import blogApi from "../api/blog.js";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {set} from "react-hook-form";
+import userApi from "../api/user.js";
 
 export const Home = () => {
 
     const [error, setError] = useState(null)
     const [loader, setLoader] = useState(true)
-
+const navigate = useNavigate()
     const [allBlogs ,  setAllBlogs] =useState(null)
     useEffect(() => {
         setError({error:false , message:''})
         setLoader(true)
         ;(async ()=>{
+
+            try{
+                const user =await userApi.getUser()
+                if(!user || !user?.data || !user?.data?.data || user?.data?.statusCode !== 200) {
+                    navigate('/login')
+                    return
+                }
+
+
+
+
+            }catch (e) {
+                console.log(e.message)
+                navigate('/login')
+                return
+
+            }
             try {
                 const allBlogs = await blogApi.getAllBlogs()
                 if(!allBlogs || !allBlogs?.data || allBlogs?.data?.data.length === 0) {

@@ -2,16 +2,38 @@ import {useEffect, useState} from "react";
 import {PostCard} from "../components/PostCard.jsx";
 import blogApi from "../api/blog.js";
 import {Container} from "../container/Container.jsx";
+import userApi from "../api/user.js";
+import {useNavigate} from "react-router-dom";
 
 export const AllPost = () => {
 
     const [blogs, setBlogs] = useState(null);
     const [loader, setLoader] = useState(true)
     const [error, setError] = useState(null)
+    const navigate = useNavigate()
     useEffect(() => {
         setError({error: false , message: ''})
         setLoader(true)
         ;(async () => {
+
+
+            try{
+                const user =await userApi.getUser()
+                if(!user || !user?.data || !user?.data?.data || user?.data?.statusCode !== 200) {
+                    navigate('/login')
+                    return
+                }
+
+
+
+
+            }catch (e) {
+                console.log(e.message)
+                navigate('/login')
+                return
+
+            }
+
             try {
                 const allBlogs = await blogApi.getAllBlogs()
                 if (!allBlogs || !allBlogs?.data || !allBlogs?.data?.data || allBlogs?.data?.statusCode !== 200 || allBlogs?.data?.data?.length === 0) {

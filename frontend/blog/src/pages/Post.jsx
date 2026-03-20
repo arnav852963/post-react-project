@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import blogApi from "../api/blog.js";
 import {PostCard} from "../components/PostCard.jsx";
 import {Container} from "../container/Container.jsx";
+import userApi from "../api/user.js";
 
 export const Post = () => {
     const [post, setPost] = useState(null)
@@ -18,6 +19,24 @@ export const Post = () => {
         setError({error:false , message: ''})
         ;(async ()=>{
             try {
+
+
+                try{
+                    const user =await userApi.getUser()
+                    if(!user || !user?.data || !user?.data?.data || user?.data?.statusCode !== 200) {
+                        navigate('/login')
+                        return
+                    }
+
+
+
+
+                }catch (e) {
+                    console.log(e.message)
+                    navigate('/login')
+                    return
+
+                }
 
                 const getPost = await blogApi.getBlog(id)
                 if(!getPost || !getPost?.data || !getPost?.data?.data || getPost?.data?.statusCode !==200) {

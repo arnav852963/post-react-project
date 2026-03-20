@@ -3,6 +3,7 @@ import {useState , useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import blogApi from "../api/blog.js";
 import {Container} from "../container/Container.jsx";
+import userApi from "../api/user.js";
 
 export const EditPost = () => {
 
@@ -13,6 +14,25 @@ export const EditPost = () => {
     useEffect(() => {
         setError((prev) => ({message: '' , error:false}))
         ;(async ()=>{
+
+            try{
+                const user =await userApi.getUser()
+                if(!user || !user?.data || !user?.data?.data || user?.data?.statusCode !== 200) {
+                    navigate('/login')
+                    return
+                }
+
+
+
+
+            }catch (e) {
+                console.log(e.message)
+                navigate('/login')
+                return
+
+            }
+
+
             try {
                 const getPost = await blogApi.getBlog(id)
                 if(!getPost || !getPost?.data || !getPost?.data?.data || getPost?.data?.statusCode !==200) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { data, Link, useNavigate } from "react-router-dom";
 
 import { login as authLogin, logout } from "../store/authSlicec.js";
@@ -13,6 +13,7 @@ import userApi from "../api/user.js";
 export const Login = () => {
 
     const { register, handleSubmit } = useForm()
+
     const [loader, setLoader] = useState(false)
     const [error, setError] = useState({
         error: false,
@@ -20,6 +21,21 @@ export const Login = () => {
     })
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+
+    useEffect(() => {
+        ;(async ()=>{
+            try{
+                const user = await userApi.getUser()
+                if(user && user?.data && user?.data?.data && user?.data?.statusCode === 200) navigate('/')
+
+            } catch (e) {
+                console.log(e.message)
+
+
+            }
+        })()
+    }, []);
 
     const login = async (payload) => {
         setLoader(true)

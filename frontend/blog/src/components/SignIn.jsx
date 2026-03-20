@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link, useNavigate} from "react-router-dom";
 
 import {login as authLogin, logout} from "../store/authSlicec.js";
@@ -20,6 +20,19 @@ export const SignIn = () => {
     })
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    useEffect(() => {
+        ;(async ()=>{
+            try{
+                const user = await userApi.getUser()
+                if(user && user?.data && user?.data?.data && user?.data?.statusCode === 200) navigate('/')
+
+            } catch (e) {
+                console.log(e.message)
+
+
+            }
+        })()
+    }, []);
 
     const signin = async (payload)=>{
 

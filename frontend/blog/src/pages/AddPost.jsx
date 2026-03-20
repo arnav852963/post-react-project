@@ -1,8 +1,34 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Container} from "../container/Container.jsx";
 import {PostForm} from "../components/post-form/PostForm.jsx";
+import userApi from "../api/user.js";
+import {useNavigate} from "react-router-dom";
 
 export const AddPost = () => {
+const navigate = useNavigate()
+    useEffect(() => {
+        ;(async ()=>{
+            try{
+                const user =await userApi.getUser()
+                if(!user || !user?.data || !user?.data?.data || user?.data?.statusCode !== 200) {
+                    navigate('/login')
+
+                }
+
+
+
+
+            }catch (e) {
+                console.log(e.message)
+                navigate('/login')
+
+
+            }
+
+        })()
+    }, []);
+
+
     return (
         <>
             <div className="py-12 bg-gray-50 min-h-screen selection:bg-[#B4FF39]">
